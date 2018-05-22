@@ -1,0 +1,85 @@
+apply plugin: 'java'
+//apply plugin: 'flyway'
+apply plugin: "com.github.onslip.gradle-one-jar"
+apply plugin: 'application'
+apply plugin: 'eclipse'
+
+// Use Java 7 by default
+sourceCompatibility = '1.7'
+targetCompatibility = '1.7'
+
+// UTF-8 should be standard by now. So use it!
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+
+// The main class of the application
+mainClassName = 'com.example.ExampleApplication'
+
+// Add Gradle OneJar Plugin, see https://github.com/rholder/gradle-one-jar
+buildscript {
+    repositories {
+        mavenCentral()
+        maven{
+        	url "https://plugins.gradle.org/m2/"
+        }
+    }
+
+    dependencies {
+        classpath 'gradle.plugin.com.github.onslip:gradle-one-jar:1.0.5'
+        //classpath 'com.h2database:h2:1.4.181'
+        //classpath 'org.flywaydb:flyway-gradle-plugin:3.0'
+    }
+}
+
+// Set our project variables
+project.ext {
+    dropwizardVersion = '0.7.1'
+    jerseyVersion = '1.18.1'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile (
+        'io.dropwizard:dropwizard-core:' + dropwizardVersion,
+        'io.dropwizard:dropwizard-hibernate:' + dropwizardVersion,
+        'com.sun.jersey:jersey-core:' + jerseyVersion,
+        //'com.h2database:h2:1.4.181',
+        //'org.flywaydb:flyway-gradle-plugin:3.0'
+        'mysql:mysql-connector-java:6.0.6'
+             
+    )
+    
+    testCompile (
+        'io.dropwizard:dropwizard-testing:' + dropwizardVersion,
+        'com.sun.jersey:jersey-client:' + jerseyVersion,
+        'com.sun.jersey.jersey-test-framework:jersey-test-framework-core:' + jerseyVersion,
+        'com.sun.jersey.jersey-test-framework:jersey-test-framework-inmemory:' + jerseyVersion
+    )
+}
+
+// Configure flyway
+//flyway {
+  //  url = 'jdbc:h2:file:./persondb'
+    //user = 'sa'
+//}
+
+// OneJAr Configuration
+
+task oneJar(type: OneJar) {
+    mainClass = mainClassName
+}
+
+// Configure the run task to start the Dropwizard service
+run {
+    args 'server', './config.yml'
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '1.4'
+}
+
+artifacts {
+    oneJar
+}
