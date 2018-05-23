@@ -1,7 +1,7 @@
 package com.example;
 
-import com.example.core.Person;
 import com.example.dao.PersonDAO;
+import com.example.model.Person;
 import com.example.resources.PersonResource;
 import io.dropwizard.Application;
 import io.dropwizard.db.DataSourceFactory;

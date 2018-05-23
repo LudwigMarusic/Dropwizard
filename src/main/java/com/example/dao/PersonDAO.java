@@ -1,8 +1,9 @@
 package com.example.dao;
 
-import com.example.core.Person;
 import io.dropwizard.hibernate.AbstractDAO;
 import org.hibernate.SessionFactory;
+
+import com.example.model.Person;
 
 import java.util.List;
 

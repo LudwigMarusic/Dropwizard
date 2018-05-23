@@ -1,7 +1,9 @@
 package com.example.resources;
 
-import com.example.core.Person;
+import com.codahale.metrics.annotation.Timed;
 import com.example.dao.PersonDAO;
+import com.example.model.Person;
+
 import io.dropwizard.hibernate.UnitOfWork;
 
 import javax.validation.Valid;
@@ -21,12 +23,14 @@ public class PersonResource {
     }
 
     @GET
+    @Timed
     @UnitOfWork
     public List<Person> getAll(){
         return personDAO.getAll();
     }
 
     @GET
+    @Timed
     @Path("/{id}")
     @UnitOfWork
     public Person get(@PathParam("id") Integer id){
@@ -34,6 +38,7 @@ public class PersonResource {
     }
 
     @POST
+    @Timed
     @UnitOfWork
     public Person add(@Valid Person person) {
         Person newPerson = personDAO.insert(person);
@@ -42,6 +47,7 @@ public class PersonResource {
     }
 
     @PUT
+    @Timed
     @Path("/{id}")
     @UnitOfWork
     public Person update(@PathParam("id") Integer id, @Valid Person person) {
@@ -52,6 +58,7 @@ public class PersonResource {
     }
 
     @DELETE
+    @Timed
     @Path("/{id}")
     @UnitOfWork
     public void delete(@PathParam("id") Integer id) {
